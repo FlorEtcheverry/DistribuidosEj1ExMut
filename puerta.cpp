@@ -30,7 +30,9 @@ int main(int argc, char** argv) { //parametros: nro_puerta,nro_personas_por_puer
     
     static char* puerta = argv[1];
     int nro_pers_puerta = atoi(argv[2]);
-
+    (Logger::getLogger())->escribir(MSJ,string("Puerta numero ")+puerta+" creada.");
+    (Logger::getLogger())->escribir(MSJ,string("Por la puerta nro ")+puerta+" ingresan/egresan "+nro_pers_puerta+" personas.");
+    
     //obtiene el semaforo
     Semaforo mutex = Semaforo(PATH_IPC.c_str());
     
@@ -53,14 +55,19 @@ int main(int argc, char** argv) { //parametros: nro_puerta,nro_personas_por_puer
         int rand = nroRandom();
         mutex.p(); //TODO errores?
         if (!(museo_shm->abierto)) { //si esta cerrado
-            for (int j=0;j<(museo_shm->cant_personas);j++) {
-                (museo_shm->cant_personas)--; //TODO ???
+            (Logger::getLogger())->escribir(MSJ,string("Museo cerrado. Salen ")+(museo_shm->cant_personas)+" por la puerta "+puerta+".");
+            while ((museo_shm->cant_personas) > 0) { //salen todas las personas
+                (museo_shm->cant_personas)--;
             }
         } else if (rand > MID_RAND && museo_shm->cant_personas < museo_shm->max_personas && museo_shm->abierto) {//entra
+            (Logger::getLogger())->escribir(MSJ,string("Entró una persona por la puerta ")+puerta+".");
             (museo_shm->cant_personas)++;
         } else { //sale
             if (museo_shm->cant_personas > 0) {
+                (Logger::getLogger())->escribir(MSJ,string("Una persona salió por la puerta ")+puerta+".");
                 (museo_shm->cant_personas)--;
+            } else {
+                (Logger::getLogger())->escribir(MSJ,string("Puerta ")+puerta+": No pueden salir mas personas porque el museo esta vacio.");
             }
         }
         mutex.v();
@@ -74,6 +81,7 @@ int main(int argc, char** argv) { //parametros: nro_puerta,nro_personas_por_puer
         Logger::destroy();
         exit(1);
     }
+    Logger::destroy();
     return 0;
 }
 

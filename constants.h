@@ -10,7 +10,7 @@
 
 static const int MUSEO_INICIAL = 0; //empieza en 0 -no entra nadie hasta q alguien abra el museo-
 
-static const std::string PATH_LOG = "./";
+static const std::string PATH_LOG = "./log.log";
 static const std::string PATH_IPC = "/home/knoppix/AlvarezEtcheverry/Ejercicio1/v1";
 static const std::string SHM_INIT_FILE = "/home/knoppix/AlvarezEtcheverry/Ejercicio1/v1/init.conf";  //abierto(1 o 0) ; cant_personas ; max_personas ; cant_visitantes ; cant_puertas (por linea)
 

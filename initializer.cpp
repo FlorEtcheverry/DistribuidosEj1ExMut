@@ -53,7 +53,7 @@ void cargarConfig(MUSEO* museo_shm,int* cant_visitantes,int* cant_puertas){
     
     getline(conf_file,linea);
     *cant_puertas = atoi(linea.c_str());
-    Logger::getLogger()->escribir(MSJ,string("Hay")+linea.c_str()+" puertas.");
+    Logger::getLogger()->escribir(MSJ,string("Hay ")+linea.c_str()+" puertas.");
         
     conf_file.close(); //TODO: chequeo de errores
 }
@@ -107,7 +107,7 @@ int main(int argc, char** argv) {
     sprintf(nro_personas_por_puerta,"%d\n",cant_visitantes);
     
     for (int i=0;i<cant_puertas;i++) {
-        sprintf(nro_puerta,"%d\n",i);
+        sprintf(nro_puerta,"%d",i);
         (Logger::getLogger())->escribir(MSJ,string("Creando puerta numero ")+nro_puerta+".");
         child_pid = fork();
         if (child_pid < 0) {
@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
             exit(1);
         }
     }
-    (Logger::getLogger())->escribir(ERROR,string("Se han creado todas las puertas."));
+    (Logger::getLogger())->escribir(MSJ,string("Se han creado todas las puertas."));
     
     Logger::destroy();
     return 0;
