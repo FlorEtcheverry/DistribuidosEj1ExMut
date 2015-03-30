@@ -28,7 +28,6 @@ int nroRandom() {
  */
 int main(int argc, char** argv) { //parametros: nro_puerta,nro_personas_por_puerta
     
-    int nro_puerta = atoi(argv[1]); //TODO ???????
     static char* puerta = argv[1];
     int nro_pers_puerta = atoi(argv[2]);
 

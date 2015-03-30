@@ -32,20 +32,29 @@ void cargarConfig(MUSEO* museo_shm,int* cant_visitantes,int* cant_puertas){
     std::string linea;
     
     getline(conf_file,linea); //TODO: chequeo de errores
-    (museo_shm->abierto) = atoi(linea.c_str());;
+    (museo_shm->abierto) = atoi(linea.c_str());
+    if (museo_shm->abierto) {
+        Logger::getLogger()->escribir(MSJ,string("Inicializado museo abierto "));
+    } else {
+        Logger::getLogger()->escribir(MSJ,string("Inicializado museo cerrado "));
+    }
     
     getline(conf_file,linea);
     (museo_shm->cant_personas) = atoi(linea.c_str());
+    Logger::getLogger()->escribir(MSJ,string("con ")+linea.c_str()+" personas dentro.");
     
     getline(conf_file,linea);
     (museo_shm->max_personas) = atoi(linea.c_str());
+    Logger::getLogger()->escribir(MSJ,string("La maxima cantidad de personas permitidas en el museo es ")+linea.c_str()+".");
     
     getline(conf_file,linea);
     *cant_visitantes = atoi(linea.c_str());
+    Logger::getLogger()->escribir(MSJ,string("Van a ingresar/egresar ")+linea.c_str()+" personas por puerta.");
     
     getline(conf_file,linea);
     *cant_puertas = atoi(linea.c_str());
-    
+    Logger::getLogger()->escribir(MSJ,string("Hay")+linea.c_str()+" puertas.");
+        
     conf_file.close(); //TODO: chequeo de errores
 }
 
@@ -53,17 +62,18 @@ void cargarConfig(MUSEO* museo_shm,int* cant_visitantes,int* cant_puertas){
  * crea los ipcs necesarios, carga datos iniciales desde arch de config y lanza los procesos
  */
 int main(int argc, char** argv) {
-
-    std::string log_path = argv[1];
-    Logger::init(log_path);
+  
+    Logger::init(PATH_LOG);
     
     /*crear la mem compartida*/ //TODO memoria compartida como clase?
     key_t key = ftok(PATH_IPC.c_str(),SHM);
     int shm_id = shmget(key,sizeof(MUSEO),IPC_CREAT|IPC_EXCL|0666);
     if (shm_id == -1) {
         (Logger::getLogger())->escribir(ERROR,std::string(strerror(errno))+" No se pudo crear la memoria compartida.");
+        Logger::destroy();
         exit(1);
     }
+    Logger::getLogger()->escribir(MSJ,"Creada memoria compartida.");
     
     /*inicializar mem compartida (att,read,det) y cargar parametros de conf*/
     MUSEO* museo_shm = static_cast<MUSEO*>(shmat(shm_id,0,0));
@@ -87,6 +97,7 @@ int main(int argc, char** argv) {
     /*inicializar mutex*/
     Semaforo mutex = Semaforo(PATH_IPC.c_str());
     mutex.init(MUSEO_INICIAL);
+    Logger::getLogger()->escribir(MSJ,"Inicializado el mutex.");
     
     /*lanzar procesos*/
     int child_pid;
@@ -97,6 +108,7 @@ int main(int argc, char** argv) {
     
     for (int i=0;i<cant_puertas;i++) {
         sprintf(nro_puerta,"%d\n",i);
+        (Logger::getLogger())->escribir(MSJ,string("Creando puerta numero ")+nro_puerta+".");
         child_pid = fork();
         if (child_pid < 0) {
             (Logger::getLogger())->escribir(ERROR,string(" No se pudo crear la puerta ")+nro_puerta+".");
@@ -112,6 +124,7 @@ int main(int argc, char** argv) {
             exit(1);
         }
     }
+    (Logger::getLogger())->escribir(ERROR,string("Se han creado todas las puertas."));
     
     Logger::destroy();
     return 0;

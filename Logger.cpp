@@ -27,6 +27,7 @@ Logger* Logger::getLogger(){
 
 void Logger::init(std::string path){
     instancia = new Logger(path);
+    instancia->escribir(MSJ,"---Logger iniciado---\n");
 }
 
 void Logger::destroy(){
@@ -45,7 +46,7 @@ void Logger::escribir(int type,std::string mensaje){ //TODO timestamp y distinto
     } else if (type == MSJ) {
         msj = "MESSAGE: ";
     }
-    msj = msj + mensaje;
+    msj = msj + mensaje + "\n";
     write(log_file,msj.c_str(),sizeof(char)*msj.size());
     res = flock(log_file,LOCK_UN);
     if (res != 0) {

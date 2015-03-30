@@ -3,8 +3,11 @@ all: project
 clean:
 	rm -rf ./build
 	rm -rf ./dist
+	rm -rf /home/knoppix/AlvarezEtcheverry
 
 project:
+	mkdir -p /home/knoppix/AlvarezEtcheverry/Ejercicio1/v1
+	cp ./init.conf /home/knoppix/AlvarezEtcheverry/Ejercicio1/v1
 	mkdir -p ./build
 	mkdir -p ./dist
 	g++ -Wall Logger.cpp -c -o ./build/Logger.o
