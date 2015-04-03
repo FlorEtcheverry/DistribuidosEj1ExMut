@@ -21,9 +21,11 @@ static const int SEM = 100;
 static const int SHM = 200;
 
 static const char* PUERTA_EXE = "./puerta";
+static const char* PUERTA = "puerta";
 
 static const int MAX_DIG_PERS_POR_PUERTA = 11; //10 digitos mas el fin de string
 static const int MAX_DIG_PUERTA = 11;
+static const int MAX_DIG_TOTAL_PERSONAS = 11;
 
 static const int MAX_RAND = 100;
 static const int MID_RAND = 50;

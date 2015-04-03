@@ -9,6 +9,7 @@
 #define	LOGGER_H
 
 #include <string>
+#include <iostream>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -17,21 +18,24 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <sys/time.h>
+#include <sstream>
+#include <iomanip>
 #include "constants.h"
 
 class Logger {
 public:
     static Logger* getLogger();
-    static void init(std::string path);
+    static void init(std::string path,std::string proceso);
     static void destroy();
     
-    Logger(std::string path);
+    Logger(std::string path,std::string proceso);
     virtual ~Logger();
     
     void escribir(int type,std::string mensaje);
 private:
     int log_file;
-    
+    std::string proceso;
     static Logger* instancia;
 
 };

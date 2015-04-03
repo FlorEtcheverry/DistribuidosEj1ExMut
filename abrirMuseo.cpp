@@ -17,6 +17,9 @@ using namespace std;
  */
 int main(int argc, char** argv) {
     
+    Logger::init(PATH_LOG,argv[0]);
+    
+    (Logger::getLogger())->escribir(MSJ,"Abriendo museo...");
     //obtiene el semaforo
     Semaforo mutex = Semaforo(PATH_IPC.c_str());
     
@@ -36,6 +39,7 @@ int main(int argc, char** argv) {
     }
     
     museo_shm->abierto = 1;
+    (Logger::getLogger())->escribir(MSJ,"El museo de ha abierto.");
     mutex.v(); //TODO errores?
 
     //desatacheo de la memoria
@@ -45,6 +49,7 @@ int main(int argc, char** argv) {
         Logger::destroy();
         exit(1);
     }
+    Logger::destroy();
     return 0;
 }
 

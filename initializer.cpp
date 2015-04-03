@@ -63,7 +63,8 @@ void cargarConfig(MUSEO* museo_shm,int* cant_visitantes,int* cant_puertas){
  */
 int main(int argc, char** argv) {
   
-    Logger::init(PATH_LOG);
+    Logger::init(PATH_LOG,argv[0]);
+    (Logger::getLogger())->escribir(MSJ,"--Iniciando programa--");
     
     /*crear la mem compartida*/ //TODO memoria compartida como clase?
     key_t key = ftok(PATH_IPC.c_str(),SHM);
@@ -104,7 +105,7 @@ int main(int argc, char** argv) {
     static char nro_puerta[MAX_DIG_PUERTA];
     static char nro_personas_por_puerta[MAX_DIG_PERS_POR_PUERTA];
     
-    sprintf(nro_personas_por_puerta,"%d\n",cant_visitantes);
+    sprintf(nro_personas_por_puerta,"%d",cant_visitantes); //convertir cant_vis de int a char*
     
     for (int i=0;i<cant_puertas;i++) {
         sprintf(nro_puerta,"%d",i);
@@ -117,14 +118,14 @@ int main(int argc, char** argv) {
             exit(1);
         }
         if (child_pid == 0) { //hijo-puerta
-            execlp(PUERTA_EXE,nro_puerta,nro_personas_por_puerta,(char*) 0);
+            execlp(PUERTA_EXE,PUERTA,nro_puerta,nro_personas_por_puerta,(char*) 0);
             (Logger::getLogger())->escribir(ERROR,string(" No se pudo ejecutar la puerta ")+nro_puerta+".");
             shmdt(museo_shm);
             Logger::destroy();
             exit(1);
         }
     }
-    (Logger::getLogger())->escribir(MSJ,string("Se han creado todas las puertas."));
+    (Logger::getLogger())->escribir(MSJ,string("Terminado el proceso de creacion de las puertas."));
     
     Logger::destroy();
     return 0;
