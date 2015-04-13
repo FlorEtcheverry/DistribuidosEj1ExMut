@@ -97,7 +97,10 @@ int main(int argc, char** argv) {
     
     /*inicializar mutex*/
     Semaforo mutex = Semaforo(PATH_IPC.c_str());
+    if (museo_shm->abierto == 1) { mutex.init(MUSEO_INICIAL_ABIERTO); 
+    } else {
     mutex.init(MUSEO_INICIAL);
+    }
     Logger::getLogger()->escribir(MSJ,"Inicializado el mutex.");
     
     /*lanzar procesos*/

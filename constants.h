@@ -9,6 +9,7 @@
 #define	CONSTANTS_H
 
 static const int MUSEO_INICIAL = 0; //empieza en 0 -no entra nadie hasta q alguien abra el museo-
+static const int MUSEO_INICIAL_ABIERTO = 1;
 
 static const std::string PATH_LOG = "./log.log";
 static const std::string PATH_IPC = "/home/knoppix/AlvarezEtcheverry/Ejercicio1/v1";
