@@ -3,7 +3,7 @@ all: project
 clean:
 	rm -rf ./build
 	rm -rf ./dist
-	rm -rf /home/knoppix/AlvarezEtcheverry
+	rm -rf /home/knoppix/AlvarezEtcheverry/Ejercicio1
 
 project:
 	mkdir -p /home/knoppix/AlvarezEtcheverry/Ejercicio1/v1

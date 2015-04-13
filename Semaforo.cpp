@@ -53,7 +53,10 @@ void Semaforo::v(){
     }
 }
 void Semaforo::destroy(){
-    semctl(this->id,0,IPC_RMID); //TODO errores?
+    int resultado = semctl(this->id,0,IPC_RMID);
+    if (resultado == -1){
+        (Logger::getLogger())->escribir(ERROR,std::string(strerror(errno))+" Error al destruir el semáforo.");
+    }
 }
 
 Semaforo::~Semaforo() {

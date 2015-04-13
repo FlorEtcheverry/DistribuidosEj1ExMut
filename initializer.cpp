@@ -113,14 +113,12 @@ int main(int argc, char** argv) {
         child_pid = fork();
         if (child_pid < 0) {
             (Logger::getLogger())->escribir(ERROR,string(" No se pudo crear la puerta ")+nro_puerta+".");
-            shmdt(museo_shm);
             Logger::destroy();
             exit(1);
         }
         if (child_pid == 0) { //hijo-puerta
             execlp(PUERTA_EXE,PUERTA,nro_puerta,nro_personas_por_puerta,(char*) 0);
             (Logger::getLogger())->escribir(ERROR,string(" No se pudo ejecutar la puerta ")+nro_puerta+".");
-            shmdt(museo_shm);
             Logger::destroy();
             exit(1);
         }
